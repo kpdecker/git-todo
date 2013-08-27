@@ -2,6 +2,8 @@
   "name": "git-todo",
   "dependencies": {
     "async": "~0.2.9",
+    "github-api": "git://github.com/kpdecker/github.git",
+    "semver": "~2.1.0",
     "underscore": "~1.5.1"
   }
 }
