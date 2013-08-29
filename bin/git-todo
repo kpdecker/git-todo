@@ -1,0 +1,115 @@
+#!/usr/bin/env node
+
+var _ = require('underscore'),
+    async = require('async'),
+    github = require('../lib/github-scan'),
+    local = require('../lib/local-scan');
+
+require('colors');
+
+var mergedInfo = {};
+
+async.parallel([
+  function(callback) {
+    github(require(getUserHome() + '/.config/git-todo'), handler(callback));
+  },
+  function(callback) {
+    var dirs = process.argv.slice(2).join(' ');
+    local(dirs, handler(callback));
+  }
+],
+function() {
+  _.each(_.keys(mergedInfo).sort(), function(name) {
+    var status = mergedInfo[name],
+        buffer = '';
+
+    if (!status.remote) {
+      buffer += '  no-remote\n'.yellow;
+    }
+    if (status.localBranch) {
+      buffer += '  local-only-branch: '.yellow + status.branch + '\n';
+    }
+    if (status.ahead) {
+      buffer += '  ahead:  '.yellow + status.ahead + '\n';
+    }
+    if (status.behind) {
+      buffer += '  behind: '.yellow + status.behind + '\n';
+    }
+
+    if (status.commits) {
+      if (buffer) {
+        buffer += '\n';
+      }
+      buffer += '  Commits since version:\n';
+      buffer += status.commits.map(function(commit) {
+        return '    ' + column(commit.sha, 6).yellow + ' : '
+            + column(commit.message.replace(/\s/g, ' '), 50)
+            + ' (@' + commit.committer + ')';
+      }).join('\n');
+      buffer += '\n';
+    }
+    if (status.pulls) {
+      if (buffer) {
+        buffer += '\n';
+      }
+      buffer += '  Open pull requests:\n';
+      buffer +=  _.map(status.pulls, function(pull) {
+        return '    ' + column('#' + pull.number, 6).yellow
+            + ' : ' + column(pull.message, 50)
+            + ' (@' + pull.committer + ')';
+      }).join('\n');
+      buffer += '\n';
+    }
+    if (status.status) {
+      var fileStatus = _.chain(status.status)
+        .map(function(count, name) {
+          if (count) {
+            return '    ' + column(name + ':', 10).yellow + ' '.yellow + count;
+          }
+        })
+        .compact()
+        .join('\n')
+        .value();
+
+      if (fileStatus) {
+        if (buffer) {
+          buffer += '\n';
+        }
+        buffer += '  File Status:\n' + fileStatus + '\n';
+      }
+    }
+
+    if (buffer) {
+      console.log(status.name.blue + ': ' + (status.latest || ''));
+      console.log('    ' + status.path);
+      console.log(buffer);
+      console.log();
+    }
+  });
+});
+
+function column(str, len) {
+  str = str.substr(0, len);
+  str += new Array(len + 1 - str.length).join(' ');
+  return str;
+}
+
+function handler(callback) {
+  return function(err, repos) {
+    if (err) {
+      console.log(err);
+      throw err;
+    }
+
+    _.each(repos, function(info, name) {
+      _.extend(mergedInfo[name] = mergedInfo[name] || {}, info);
+    });
+
+    callback();
+  };
+}
+
+// http://stackoverflow.com/questions/9080085/node-js-find-home-directory-in-platform-agnostic-way
+function getUserHome() {
+  return process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
+}
