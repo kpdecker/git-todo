@@ -14,6 +14,15 @@ Checks all git repositories in a given directory for:
 
 # Installation
 
+A config file needs to be created in `~/.config/git-todo`. This is standard CommonJS module exporting the options listed below. 
+
+## Options
+
+- Github authentication [options](https://github.com/michael/github#usage).
+- (optional) `repoFilter` : Method used to filter server-side repos from the status results.
+
+## Example
+
 ```javascript
 module.exports = {
   auth: 'oauth',
