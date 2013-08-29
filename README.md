@@ -1,6 +1,6 @@
 # git-todo
 
-Git repsitory status scanner.
+Git repository status scanner.
 
 Checks github for:
 - Open pull requests
