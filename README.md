@@ -14,6 +14,10 @@ Checks all git repositories in a given directory for:
 
 # Installation
 
+```
+npm install -g git-todo
+```
+
 A config file needs to be created in `~/.config/git-todo`. This is standard CommonJS module exporting the options listed below. 
 
 ## Options
