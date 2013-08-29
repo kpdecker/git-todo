@@ -1,4 +1,4 @@
-# Git TODO
+# git-todo
 
 Git repsitory status scanner.
 
