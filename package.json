@@ -1,9 +1,23 @@
 {
   "name": "git-todo",
+  "version": "0.0.0",
+  "description": "Git repository status scanner.",
+  "author": "Kevin Decker <kpdecker@gmail.com> (http://incaseofstairs.com)",
+
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kpdecker/git-todo.git"
+  },
+  "engines": {
+    "node": ">=0.8"
+  },
   "dependencies": {
     "async": "~0.2.9",
     "github-api": "git://github.com/kpdecker/github.git",
     "semver": "~2.1.0",
     "underscore": "~1.5.1"
+  },
+  "bin": {
+    "git-todo": "bin/git-todo"
   }
 }
