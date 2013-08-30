@@ -12,7 +12,7 @@ Checks all git repositories in a given directory for:
 - Unpulled changes
 
 
-# Installation
+## Installation
 
 ```
 npm install -g git-todo
@@ -20,12 +20,12 @@ npm install -g git-todo
 
 A config file needs to be created in `~/.config/git-todo`. This is standard CommonJS module exporting the options listed below. 
 
-## Options
+### Options
 
 - Github authentication [options](https://github.com/michael/github#usage).
 - (optional) `repoFilter` : Method used to filter server-side repos from the status results.
 
-## Example
+### Example
 
 ```javascript
 module.exports = {
@@ -42,7 +42,7 @@ module.exports = {
 };
 ```
 
-# Usage
+## Usage
 
 ```sh
 git-todo [local dir name ...]
