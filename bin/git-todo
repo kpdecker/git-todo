@@ -19,6 +19,8 @@ async.parallel([
   }
 ],
 function() {
+  var outputCount = 0;
+
   _.each(_.keys(mergedInfo).sort(), function(name) {
     var status = mergedInfo[name],
         buffer = '';
@@ -80,12 +82,18 @@ function() {
     }
 
     if (buffer) {
+      outputCount++;
+
       console.log(status.name.blue + ': ' + (status.latest || ''));
       console.log('    ' + status.path);
       console.log(buffer);
       console.log();
     }
   });
+
+  if (outputCount) {
+    console.log(outputCount + ' repositories with TODOs');
+  }
 });
 
 function column(str, len) {
