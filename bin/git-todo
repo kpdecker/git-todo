@@ -37,6 +37,26 @@ function() {
     if (status.behind) {
       buffer += '  behind: '.yellow + status.behind + '\n';
     }
+    if (status.unmergedBranches) {
+      if (buffer) {
+        buffer += '\n';
+      }
+      var localOnlyBranches = _.filter(status.unmergedBranches, function(branch) { return branch.localBranch; }).length,
+          aheadBranches = _.filter(status.unmergedBranches, function(branch) { return branch.ahead; }).length,
+          unmerged = _.keys(status.unmergedBranches).length - localOnlyBranches - aheadBranches;
+
+      buffer += '  Branch Status:\n';
+
+      if (unmerged) {
+        buffer += '    unmerged:   '.yellow + unmerged + '\n';
+      }
+      if (localOnlyBranches) {
+        buffer += '    local-only: '.yellow + localOnlyBranches + '\n';
+      }
+      if (aheadBranches) {
+        buffer += '    ahead:      '.yellow + aheadBranches + '\n';
+      }
+    }
 
     if (status.commits) {
       if (buffer) {
