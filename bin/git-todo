@@ -37,6 +37,9 @@ function() {
     if (status.behind) {
       buffer += '  behind: '.yellow + status.behind + '\n';
     }
+    if (status.stashes) {
+      buffer += '  stash:  '.yellow + status.stashes + '\n';
+    }
     if (status.unmergedBranches) {
       if (buffer) {
         buffer += '\n';
