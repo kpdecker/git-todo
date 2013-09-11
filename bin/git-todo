@@ -40,6 +40,9 @@ function() {
     if (status.stashes) {
       buffer += '  stash:  '.yellow + status.stashes + '\n';
     }
+    if (status.issues) {
+      buffer += '  issues: '.yellow + status.issues + '\n';
+    }
     if (status.unmergedBranches) {
       if (buffer) {
         buffer += '\n';
