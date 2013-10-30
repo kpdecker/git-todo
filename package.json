@@ -14,6 +14,7 @@
     "async": "~0.2.9",
     "colors": "~0.6.2",
     "github-api": "git://github.com/kpdecker/github.git",
+    "optimist": "~0.6.0",
     "semver": "~2.1.0",
     "underscore": "~1.5.1"
   },
