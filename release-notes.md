@@ -2,7 +2,17 @@
 
 ## Development
 
-[Commits](https://github.com/kpdecker/git-todo/compare/v1.1.0...master)
+[Commits](https://github.com/kpdecker/git-todo/compare/v1.1.1...master)
+
+## v1.1.1 - October 29th, 2013
+
+- [#9](https://github.com/kpdecker/git-todo/issues/9) - Optimize branch tracking ([@kpdecker](https://api.github.com/users/kpdecker))
+- [#11](https://github.com/kpdecker/git-todo/issues/11) - Allow config to be specified on command line ([@kpdecker](https://api.github.com/users/kpdecker))
+
+- Import colors module - 52f1af7
+- Short circuit missing local scan directories - 8c94990
+
+[Commits](https://github.com/kpdecker/git-todo/compare/v1.1.0...v1.1.1)
 
 ## v1.1.0 - September 11th, 2013
 
