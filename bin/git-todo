@@ -131,10 +131,10 @@ function() {
         console.log(status.name.blue + ': ' + (status.latest || ''));
       }
       if (status.path) {
-        console.log('    ' + status.path + (argv.html ? '<br' : ''));
+        console.log('    ' + status.path + (argv.html ? '<br>' : ''));
       }
       console.log(buffer);
-      console.log(argv.html ? '<br' : '');
+      console.log(argv.html ? '<br>' : '');
     }
 
 
