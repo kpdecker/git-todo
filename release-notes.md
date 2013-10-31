@@ -2,7 +2,13 @@
 
 ## Development
 
-[Commits](https://github.com/kpdecker/git-todo/compare/v1.1.2...master)
+[Commits](https://github.com/kpdecker/git-todo/compare/v1.1.3...master)
+
+## v1.1.3 - October 31st, 2013
+
+- Improve html output - c0a29e4
+
+[Commits](https://github.com/kpdecker/git-todo/compare/v1.1.2...v1.1.3)
 
 ## v1.1.2 - October 31st, 2013
 
