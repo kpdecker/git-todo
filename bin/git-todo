@@ -43,23 +43,25 @@ function() {
     var status = mergedInfo[name],
         buffer = '';
 
+    var NEWLINE = argv.html ? '<br>\n' : '\n';
+
     if (!status.remote) {
-      buffer += '  no-remote\n'.yellow;
+      buffer += '  no-remote\n'.yellow + NEWLINE;
     }
     if (status.localBranch) {
-      buffer += '  local-only-branch: '.yellow + status.branch + '\n';
+      buffer += '  local-only-branch: '.yellow + status.branch + NEWLINE;
     }
     if (status.ahead) {
-      buffer += '  ahead:  '.yellow + status.ahead + '\n';
+      buffer += '  ahead:  '.yellow + status.ahead + NEWLINE;
     }
     if (status.behind) {
-      buffer += '  behind: '.yellow + status.behind + '\n';
+      buffer += '  behind: '.yellow + status.behind + NEWLINE;
     }
     if (status.stashes) {
-      buffer += '  stash:  '.yellow + status.stashes + '\n';
+      buffer += '  stash:  '.yellow + status.stashes + NEWLINE;
     }
     if (status.issues) {
-      buffer += '  issues: '.yellow + status.issues + '\n';
+      buffer += '  issues: '.yellow + status.issues + NEWLINE;
     }
     if (status.unmergedBranches) {
       if (buffer) {
@@ -69,69 +71,96 @@ function() {
           aheadBranches = _.filter(status.unmergedBranches, function(branch) { return branch.ahead; }).length,
           unmerged = _.keys(status.unmergedBranches).length - localOnlyBranches - aheadBranches;
 
-      buffer += '  Branch Status:\n';
+      header('Branch Status');
 
       if (unmerged) {
-        buffer += '    unmerged:   '.yellow + unmerged + '\n';
+        buffer += '    unmerged:   '.yellow + unmerged + NEWLINE;
       }
       if (localOnlyBranches) {
-        buffer += '    local-only: '.yellow + localOnlyBranches + '\n';
+        buffer += '    local-only: '.yellow + localOnlyBranches + NEWLINE;
       }
       if (aheadBranches) {
-        buffer += '    ahead:      '.yellow + aheadBranches + '\n';
+        buffer += '    ahead:      '.yellow + aheadBranches + NEWLINE;
       }
     }
 
     if (status.commits) {
-      if (buffer) {
-        buffer += '\n';
-      }
-      buffer += '  Commits since version:\n';
-      buffer += status.commits.map(function(commit) {
-        return '    ' + column(commit.sha, 6).yellow + ' : '
-            + column(commit.message.replace(/\s/g, ' '), 50)
-            + ' (@' + commit.committer + ')';
-      }).join('\n');
-      buffer += '\n';
+      header('Commits since version');
+      list(status.commits.map(function(commit) {
+          return column(commit.sha, 6).yellow + ' : '
+              + column(commit.message.replace(/\s/g, ' '), 50)
+              + ' (@' + commit.committer + ')';
+        })
+        .map(listItem)
+        .join('\n'));
     }
     if (status.pulls) {
-      if (buffer) {
-        buffer += '\n';
-      }
-      buffer += '  Open pull requests:\n';
-      buffer +=  _.map(status.pulls, function(pull) {
-        return '    ' + column('#' + pull.number, 6).yellow
-            + ' : ' + column(pull.message, 50)
-            + ' (@' + pull.committer + ')';
-      }).join('\n');
-      buffer += '\n';
+      header('Open pull requests');
+      list(_.map(status.pulls, function(pull) {
+          return column('#' + pull.number, 6).yellow
+              + ' : ' + column(pull.message, 50)
+              + ' (@' + pull.committer + ')';
+        })
+        .map(listItem)
+        .join('\n'));
     }
     if (status.status) {
       var fileStatus = _.chain(status.status)
         .map(function(count, name) {
           if (count) {
-            return '    ' + column(name + ':', 10).yellow + ' '.yellow + count;
+            return column(name + ':', 10).yellow + ' '.yellow + count;
           }
         })
         .compact()
+        .map(listItem)
         .join('\n')
         .value();
 
       if (fileStatus) {
-        if (buffer) {
-          buffer += '\n';
-        }
-        buffer += '  File Status:\n' + fileStatus + '\n';
+        header('File Status');
+        list(fileStatus);
       }
     }
 
     if (buffer) {
       outputCount++;
 
-      console.log(status.name.blue + ': ' + (status.latest || ''));
-      console.log('    ' + status.path);
+      if (argv.html) {
+        console.log('<h2>' + status.name.blue + ': ' + (status.latest || '') + '</h2>');
+      } else {
+        console.log(status.name.blue + ': ' + (status.latest || ''));
+      }
+      if (status.path) {
+        console.log('    ' + status.path + (argv.html ? '<br' : ''));
+      }
       console.log(buffer);
-      console.log();
+      console.log(argv.html ? '<br' : '');
+    }
+
+
+    function header(text) {
+      if (buffer) {
+        buffer += '\n';
+      }
+      if (argv.html) {
+        buffer += '<h3>' + text + '</h3>\n';
+      } else {
+        buffer += '  ' + text + ':\n';
+      }
+    }
+    function list(content) {
+      if (argv.html) {
+        buffer += '<ul>\n' + content + '\n</ul>\n';
+      } else {
+        buffer += content + '\n';
+      }
+    }
+    function listItem(content) {
+      if (argv.html) {
+        return '     <li>' + content + '</li>';
+      } else {
+        return '     ' + content;
+      }
     }
   });
 
