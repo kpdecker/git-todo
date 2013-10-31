@@ -68,21 +68,15 @@ function() {
     if (status.commits) {
       header('Commits since version');
       list(status.commits.map(function(commit) {
-          return column(commit.sha, 6).yellow + ' : '
-              + column(commit.message.replace(/\s/g, ' '), 50)
-              + ' (@' + commit.committer + ')';
+          return listItem(commit.sha, commit.message, commit.committer, 'https://github.com/' + status.name + '/commit/' + commit.sha);
         })
-        .map(listItem)
         .join('\n'));
     }
     if (status.pulls) {
       header('Open pull requests');
       list(_.map(status.pulls, function(pull) {
-          return column('#' + pull.number, 6).yellow
-              + ' : ' + column(pull.message, 50)
-              + ' (@' + pull.committer + ')';
+          return listItem('#' + pull.number, pull.message, pull.committer, 'https://github.com/' + status.name + '/pull/' + pull.number);
         })
-        .map(listItem)
         .join('\n'));
     }
     if (status.status) {
@@ -127,7 +121,16 @@ function() {
         buffer += content + '\n';
       }
     }
-    function listItem(content) {
+    function listItem(title, message, committer, link) {
+      title = column(title, 6).yellow;
+      if (argv.html && link) {
+        title = '<a href="' + link + '">' + title + '</a>';
+      }
+
+      var content = title + ' : '
+              + column(message.replace(/\s/g, ' '), 50)
+              + ' (@' + committer + ')';
+
       if (argv.html) {
         return '     <li>' + content + '</li>';
       } else {
