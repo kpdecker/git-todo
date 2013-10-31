@@ -18,9 +18,7 @@ var argv = optimist
     .alias('h', 'html')
     .argv;
 
-if (argv.html) {
-  colors.mode = 'browser';
-} else if (!process.stdout.isTTY) {
+if (argv.html || !process.stdout.isTTY) {
   colors.mode = 'none';
 }
 
