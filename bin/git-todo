@@ -43,40 +43,26 @@ function() {
 
     var NEWLINE = argv.html ? '<br>\n' : '\n';
 
-    if (!status.remote) {
-      buffer += '  no-remote\n'.yellow + NEWLINE;
-    }
-    if (status.localBranch) {
-      buffer += '  local-only-branch: '.yellow + status.branch + NEWLINE;
-    }
-    if (status.ahead) {
-      buffer += '  ahead:  '.yellow + status.ahead + NEWLINE;
-    }
-    if (status.behind) {
-      buffer += '  behind: '.yellow + status.behind + NEWLINE;
-    }
-    if (status.stashes) {
-      buffer += '  stash:  '.yellow + status.stashes + NEWLINE;
-    }
-    if (status.issues) {
-      buffer += '  issues: '.yellow + status.issues + NEWLINE;
-    }
+    buffer += keys({
+      'no-remote': !status.remote,
+      'local-only-branch': status.localBranch && status.branch,
+      ahead: status.ahead,
+      behind: status.behind,
+      stashes: status.stashes,
+      issues: status.issues
+    }, true);
+
     if (status.unmergedBranches) {
       var localOnlyBranches = _.filter(status.unmergedBranches, function(branch) { return branch.localBranch; }).length,
           aheadBranches = _.filter(status.unmergedBranches, function(branch) { return branch.ahead; }).length,
           unmerged = _.keys(status.unmergedBranches).length - localOnlyBranches - aheadBranches;
 
       header('Branch Status');
-
-      if (unmerged) {
-        buffer += '    unmerged:   '.yellow + unmerged + NEWLINE;
-      }
-      if (localOnlyBranches) {
-        buffer += '    local-only: '.yellow + localOnlyBranches + NEWLINE;
-      }
-      if (aheadBranches) {
-        buffer += '    ahead:      '.yellow + aheadBranches + NEWLINE;
-      }
+      buffer += keys({
+        unmerged: unmerged,
+        'local-only': localOnlyBranches,
+        ahead: aheadBranches
+      });
     }
 
     if (status.commits) {
@@ -100,20 +86,11 @@ function() {
         .join('\n'));
     }
     if (status.status) {
-      var fileStatus = _.chain(status.status)
-        .map(function(count, name) {
-          if (count) {
-            return column(name + ':', 10).yellow + ' '.yellow + count;
-          }
-        })
-        .compact()
-        .map(listItem)
-        .join('\n')
-        .value();
+      var fileStatus = keys(status.status);
 
       if (fileStatus) {
         header('File Status');
-        list(fileStatus);
+        buffer += fileStatus;
       }
     }
 
@@ -156,6 +133,30 @@ function() {
       } else {
         return '     ' + content;
       }
+    }
+    function keys(object, shallow) {
+      var columnSize = _.keys(object).reduce(function(prev, value) { return Math.max(value.length, prev); }, 0);
+
+      var list = _.compact(_.map(object, function(value, key) {
+          if (value) {
+            if (argv.html) {
+              return '<dt>' + key + '</dt><dd>' + value + '</dd>';
+            } else {
+              if (value === true) {
+                return key.yellow;
+              } else {
+                return column(key + ':', columnSize).yellow + ' ' + value;
+              }
+            }
+          }
+        }))
+        .map(function(value) { return (shallow ? '  ' : '    ') + value + '\n'; })
+        .join('');
+
+      if (list && argv.html) {
+        list = '<dl>\n' + list + '</dl>';
+      }
+      return list;
     }
   });
 
