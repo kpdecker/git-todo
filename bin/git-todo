@@ -64,9 +64,6 @@ function() {
       buffer += '  issues: '.yellow + status.issues + NEWLINE;
     }
     if (status.unmergedBranches) {
-      if (buffer) {
-        buffer += '\n';
-      }
       var localOnlyBranches = _.filter(status.unmergedBranches, function(branch) { return branch.localBranch; }).length,
           aheadBranches = _.filter(status.unmergedBranches, function(branch) { return branch.ahead; }).length,
           unmerged = _.keys(status.unmergedBranches).length - localOnlyBranches - aheadBranches;
