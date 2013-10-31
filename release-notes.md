@@ -2,7 +2,13 @@
 
 ## Development
 
-[Commits](https://github.com/kpdecker/git-todo/compare/v1.1.1...master)
+[Commits](https://github.com/kpdecker/git-todo/compare/v1.1.2...master)
+
+## v1.1.2 - October 31st, 2013
+
+- Add plain and html output options - 5e3fe1e
+
+[Commits](https://github.com/kpdecker/git-todo/compare/v1.1.1...v1.1.2)
 
 ## v1.1.1 - October 29th, 2013
 
