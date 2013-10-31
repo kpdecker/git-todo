@@ -2,20 +2,27 @@
 
 var _ = require('underscore'),
     async = require('async'),
+    colors = require('colors'),
     github = require('../lib/github-scan'),
     local = require('../lib/local-scan'),
     optimist = require('optimist');
 
-require('colors');
-
 var mergedInfo = {};
 
 var argv = optimist
-    .usage('Scan scans local git repos and github for outstanding code\nUsage $0 [--config configFile] dirs')
+    .usage('Scan scans local git repos and github for outstanding code\nUsage $0 [--config configFile] [--html] dirs')
     .demand('c')
     .alias('c', 'config')
     .default('c', getUserHome() + '/.config/git-todo')
+    .boolean('h')
+    .alias('h', 'html')
     .argv;
+
+if (argv.html) {
+  colors.mode = 'browser';
+} else if (!process.stdout.isTTY) {
+  colors.mode = 'none';
+}
 
 async.parallel([
   function(callback) {
