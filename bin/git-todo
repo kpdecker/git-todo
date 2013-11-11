@@ -22,16 +22,18 @@ if (argv.html || !process.stdout.isTTY) {
   colors.mode = 'none';
 }
 
+var config = argv.config;
+config = config.replace(/^~\//, getUserHome() + '/');
+config = require(config);
+
 async.parallel([
   function(callback) {
-    var config = argv.config;
-    config = config.replace(/^~\//, getUserHome() + '/');
 
-    github(require(config), handler(callback));
+    github(config, handler(callback));
   },
   function(callback) {
     var dirs = argv._.join(' ');
-    local(dirs, handler(callback));
+    local(dirs, config, handler(callback));
   }
 ],
 function() {
