@@ -2,7 +2,15 @@
 
 ## Development
 
-[Commits](https://github.com/kpdecker/git-todo/compare/v1.1.3...master)
+[Commits](https://github.com/kpdecker/git-todo/compare/v1.2.0...master)
+
+## v1.2.0 - December 12th, 2013
+
+- [#6](https://github.com/kpdecker/git-todo/issues/6) - Add ignore option for local repos ([@kpdecker](https://api.github.com/users/kpdecker))
+
+- Generic formatting fixes
+
+[Commits](https://github.com/kpdecker/git-todo/compare/v1.1.3...v1.2.0)
 
 ## v1.1.3 - October 31st, 2013
 
