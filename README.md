@@ -47,3 +47,7 @@ module.exports = {
 ```sh
 git-todo [local dir name ...]
 ```
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/kpdecker/git-todo/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
